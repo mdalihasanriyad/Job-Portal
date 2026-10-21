@@ -5,10 +5,10 @@
   "outputDirectory": "dist",
   "trailingSlash": false,
   "functions": {
-    "api/*.ts": {
-      "includeFiles": "dist/index.html",
-      "maxDuration": 60
-    }
+    "api/**/*.ts": {
+    "includeFiles": "dist/index.html",
+    "maxDuration": 60
+  }
   },
   "redirects": [
     {
