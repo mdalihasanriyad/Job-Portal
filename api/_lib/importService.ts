@@ -118,7 +118,15 @@ export async function listSources(db: Db): Promise<unknown> {
 
 export async function createSource(db: Db, req: Req): Promise<{ status: number; body: unknown }> {
   const parsed = parseSource(await readJsonBody(req), await categorySlugs(db));
-  if (!parsed.ok) throw new HttpError(422, 'validation', 'ফর্মে কিছু ত্রুটি আছে।', parsed.errors);
+  // if (!parsed.ok) throw new HttpError(422, 'validation', 'ফর্মে কিছু ত্রুটি আছে।', parsed.errors);
+    if (parsed.ok === false) {
+  throw new HttpError(
+    422,
+    'validation',
+    'ফর্মে কিছু ত্রুটি আছে।',
+    parsed.errors
+  );
+}
   const now = new Date();
   const result = await col.importSources(db).insertOne({ ...parsed.value, createdAt: now, updatedAt: now });
   return { status: 201, body: { source: toSource({ ...parsed.value, _id: result.insertedId, createdAt: now }) } };
@@ -127,7 +135,15 @@ export async function createSource(db: Db, req: Req): Promise<{ status: number; 
 export async function updateSource(db: Db, req: Req, id: string | undefined): Promise<unknown> {
   const objectId = toObjectId(id);
   const parsed = parseSource(await readJsonBody(req), await categorySlugs(db));
-  if (!parsed.ok) throw new HttpError(422, 'validation', 'ফর্মে কিছু ত্রুটি আছে।', parsed.errors);
+  // if (!parsed.ok) throw new HttpError(422, 'validation', 'ফর্মে কিছু ত্রুটি আছে।', parsed.errors);
+    if (parsed.ok === false) {
+  throw new HttpError(
+    422,
+    'validation',
+    'ফর্মে কিছু ত্রুটি আছে।',
+    parsed.errors
+  );
+}
   const { termsUrl, ...rest } = parsed.value;
   const update: Document = { $set: { ...rest, updatedAt: new Date(), ...(termsUrl ? { termsUrl } : {}) } };
   if (!termsUrl) update.$unset = { termsUrl: '' };
